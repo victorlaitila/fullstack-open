@@ -10,5 +10,5 @@ sequenceDiagram
     server-->>browser: 201 Created
     deactivate server
 
-    Note right of browser: The browser executes the callback function that renders the new note
+    Note right of browser: The browser stays on the same page and the notes are rerendered
 ```
