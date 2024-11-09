@@ -10,6 +10,11 @@ sequenceDiagram
     server-->>browser: 302 Found (redirect)
     deactivate server
 
+    browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/notes
+    activate server
+    server-->>browser: HTML document
+    deactivate server
+
     browser->>server: GET https://studies.cs.helsinki.fi/exampleapp/main.css
     activate server
     server-->>browser: the css file
