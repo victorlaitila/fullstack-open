@@ -30,12 +30,15 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
-  const [votes, setVote] = useState(Array(8).fill(0))
+  const [votes, setVote] = useState(Array(anecdotes.length).fill(0))
   const [favoriteAnecdoteIndex, setFavoriteAnecdoteIndex] = useState(0);
 
 
   const displayNextAnecdote = () => {
-    const randomIndex = Math.floor(Math.random() * anecdotes.length)
+    let randomIndex = selected
+    while (randomIndex === selected) {
+      randomIndex = Math.floor(Math.random() * anecdotes.length)
+    }
     setSelected(randomIndex)
   }
 
