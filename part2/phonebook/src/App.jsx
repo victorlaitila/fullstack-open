@@ -1,28 +1,7 @@
 import { useState } from 'react'
-
-const AddPersonForm = ({newName, newNumber, addPerson, handleNameChange, handleNumberChange}) => {
-  return (
-    <form onSubmit={addPerson}>
-      <div>
-        Name: <input value={newName} onChange={handleNameChange} />
-      </div>
-      <div>
-        Number: <input value={newNumber} onChange={handleNumberChange} />
-      </div>
-      <div>
-        <button type="submit">Add</button>
-      </div>
-    </form>
-  )
-}
-
-const PersonFilter = ({searchQuery, handleSearchQueryChange}) => {
-  return (
-    <div>
-      Filter shown with <input value={searchQuery} onChange={handleSearchQueryChange} />
-    </div>
-  )
-}
+import PersonList from './components/PersonList'
+import PersonFilter from './components/PersonFilter'
+import AddPersonForm from './components/AddPersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -34,13 +13,26 @@ const App = () => {
     ? persons.filter((person) => person.name.toLowerCase().startsWith(searchQuery.toLowerCase())) 
     : persons
 
-  const addPerson = (event) => {
-    event.preventDefault()
+  const validatePerson = () => {
+    const emptyNameOrNumber = newName === '' || newNumber === ''
+    if (emptyNameOrNumber) {
+      const errorMsg = 'Name and number must be filled out'
+      alert(errorMsg)
+      return false
+    }
     const nameAlreadyExists = persons.some((person) => person.name.toLowerCase() === newName.toLowerCase())
     if (nameAlreadyExists) {
       const errorMsg = `${newName} is already added to phonebook`
       alert(errorMsg)
-    } else {
+      return false
+    }
+    return true
+  }
+
+  const addPerson = (event) => {
+    event.preventDefault()
+    const validPerson = validatePerson()
+    if (validPerson) {
       const personObject = {name: newName, number: newNumber}
       setPersons(persons.concat(personObject))
       setNewName('')
@@ -73,7 +65,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      {personsToShow.map((person) => <p key={person.name}>{person.name} {person.number}</p>)}
+      <PersonList persons={personsToShow} />
     </div>
   )
 }
