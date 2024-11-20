@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import PersonList from './components/PersonList'
 import PersonFilter from './components/PersonFilter'
 import AddPersonForm from './components/AddPersonForm'
+import phoneNumberService from './services/phoneNumbers'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -11,10 +11,9 @@ const App = () => {
   const [searchQuery, setNewSearchQuery] = useState('')
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then((response) => {
-        console.log(response.data)
+    phoneNumberService.getAll()
+      .then(initialNumbers => {
+        setPersons(initialNumbers)
       })
   }, [])
 
@@ -42,10 +41,26 @@ const App = () => {
     event.preventDefault()
     const validPerson = validatePerson()
     if (validPerson) {
-      const personObject = {name: newName, number: newNumber}
-      setPersons(persons.concat(personObject))
-      setNewName('')
-      setNewNumber('')
+      const newId = (persons.length + 1).toString()
+      const personObject = {name: newName, number: newNumber, id: newId}
+      phoneNumberService.create(personObject)
+        .then(response => {
+          setPersons(persons.concat(response))
+          setNewName('')
+          setNewNumber('')
+        })
+    }
+  }
+
+  const deletePerson = (id) => {
+    const personToDelete = persons.find(p => p.id === id)
+    const confirmationMsg = `Delete ${personToDelete?.name} ?`
+    if (window.confirm(confirmationMsg)) {
+      phoneNumberService.deleteById(id)
+        .then(response => {
+          const updatedList = persons.filter(p => p.id !== response.id)
+          setPersons(updatedList)
+        })
     }
   }
 
@@ -74,7 +89,7 @@ const App = () => {
         handleNumberChange={handleNumberChange}
       />
       <h2>Numbers</h2>
-      <PersonList persons={personsToShow} />
+      <PersonList persons={personsToShow} deletePerson={deletePerson} />
     </div>
   )
 }
