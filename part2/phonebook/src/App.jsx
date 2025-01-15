@@ -14,12 +14,13 @@ const App = () => {
   const [notificationData, setNotificationData] = useState(null)
 
   useEffect(() => {
-    async function initializeNumbers() {
-      const initialNumbers = await phoneNumberService.getAll()
-      setPersons(initialNumbers)
-    }
     initializeNumbers()
   }, [])
+
+  const initializeNumbers = async () => {
+    const initialNumbers = await phoneNumberService.getAll()
+    setPersons(initialNumbers)
+  }
 
   const personsToShow = searchQuery !== '' 
     ? persons.filter((person) => person.name.toLowerCase().startsWith(searchQuery.toLowerCase())) 
@@ -60,8 +61,8 @@ const App = () => {
     if (validPerson) {
       const newId = (persons.length + 1).toString()
       const personObject = {name: newName, number: newNumber, id: newId}
-      const newNote = await phoneNumberService.create(personObject)
-      setPersons(persons.concat(newNote))
+      const newPerson = await phoneNumberService.create(personObject)
+      setPersons(persons.concat(newPerson))
       showNotification(`${newName} was succesfully added to phonebook!`, 'success')
       setNewName('')
       setNewNumber('')
@@ -79,6 +80,8 @@ const App = () => {
         showNotification(`${personToDelete.name} was succesfully deleted from phonebook!`, 'success')
       } catch(error) {
         showNotification(`Information of ${personToDelete.name} has already been removed from the server!`, 'failure')
+        // Rerendering numbers
+        initializeNumbers()
       }
       
     }
