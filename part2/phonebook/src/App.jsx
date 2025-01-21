@@ -59,8 +59,7 @@ const App = () => {
     event.preventDefault()
     const validPerson = await validatePerson()
     if (validPerson) {
-      const newId = (persons.length + 1).toString()
-      const personObject = {name: newName, number: newNumber, id: newId}
+      const personObject = {name: newName, number: newNumber}
       const newPerson = await phoneNumberService.create(personObject)
       setPersons(persons.concat(newPerson))
       showNotification(`${newName} was succesfully added to phonebook!`, 'success')
@@ -74,8 +73,9 @@ const App = () => {
     const confirmationMsg = `Delete ${personToDelete?.name} ?`
     if (window.confirm(confirmationMsg)) {
       try {
-        const deletedNumber = await phoneNumberService.deleteById(id)
-        const updatedList = persons.filter(p => p.id !== deletedNumber.id)
+        await phoneNumberService.deleteById(id)
+        // "Optimistic" deletion
+        const updatedList = persons.filter(p => p.id !== id)
         setPersons(updatedList)
         showNotification(`${personToDelete.name} was succesfully deleted from phonebook!`, 'success')
       } catch(error) {
