@@ -46,9 +46,13 @@ const App = () => {
       if (window.confirm(confirmUpdateMsg)) {
         const personToUpdate = persons.find(person => person.name.toLowerCase() === newName.toLowerCase())
         const newPersonObject = {...personToUpdate, number: newNumber}
-        const updatedPerson = await phoneNumberService.updateById(personToUpdate.id, newPersonObject)
-        setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person))
-        showNotification(`Number successfully updated for ${updatedPerson.name}!`, 'success')
+        try {
+          const updatedPerson = await phoneNumberService.updateById(personToUpdate.id, newPersonObject)
+          setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person))
+          showNotification(`Number successfully updated for ${updatedPerson.name}!`, 'success')
+        } catch (err) {
+          showNotification(err.response.data.error, 'failure')
+        }
       }
       return false
     }
@@ -60,11 +64,15 @@ const App = () => {
     const validPerson = await validatePerson()
     if (validPerson) {
       const personObject = {name: newName, number: newNumber}
-      const newPerson = await phoneNumberService.create(personObject)
-      setPersons(persons.concat(newPerson))
-      showNotification(`${newName} was succesfully added to phonebook!`, 'success')
-      setNewName('')
-      setNewNumber('')
+      try {
+        const newPerson = await phoneNumberService.create(personObject)
+        setPersons(persons.concat(newPerson))
+        showNotification(`${newName} was succesfully added to phonebook!`, 'success')
+        setNewName('')
+        setNewNumber('')
+      } catch (err) {
+        showNotification(err.response.data.error, 'failure')
+      }
     }
   }
 
