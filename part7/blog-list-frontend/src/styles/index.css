@@ -1,0 +1,78 @@
+.notification {
+  border: solid;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  background-color: beige;
+  width: fit-content;
+  padding: 15px 20px;
+  border-radius: 8px;
+}
+.success-notification-color {
+  color: green;
+}
+.error-notification-color {
+  color: red;
+}
+.display-flex-gap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.display-block {
+  display: block;
+}
+.blog-item {
+  border: solid;
+  border-radius: 2px;
+  padding: 6px;
+  margin-bottom: 14px;
+}
+.delete-button {
+  background-color: rgb(148, 45, 45);
+  color: white;
+  border-radius: 2px;
+}
+button {
+  cursor: pointer;
+}
+.padding {
+  padding-right: 5px;
+}
+table {
+  width: 30%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  margin-top: -10px;
+}
+th, td {
+  border: 1px solid #ddd;
+  padding: 5px 15px;
+  text-align: left;
+}
+th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+td {
+  background-color: #fff;
+}
+.navigation-menu {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgb(200, 216, 236);
+  padding: 14px 10px;
+  margin-bottom: 20px;
+}
+.margin-bottom-10 {
+  margin-bottom: 10px;
+}
+.margin-bottom-30 {
+  margin-bottom: 30px;
+}
+button {
+  border-radius: 4px;
+  background-color: rgb(91, 91, 203);
+  color: white;
+}
